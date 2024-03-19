@@ -1,0 +1,310 @@
+local marker_loot_storage = {}
+
+local UF_MARKER_LOOT_RANGE_SCALE = 100
+local aabb_dispaly_range = UF_MARKER_LOOT_RANGE_SCALE
+local aabb_dont_dispaly_range = 0
+
+local aabb_size_ratio = 1.0
+local aabb_size = 0
+
+local aabb_dot_display_ratio = 0.5
+local aabb_dot_display_size = 50.0
+
+local npc_head_pos = 1.8
+
+local aabb_color_type = {
+	neutral = "ally_aabb_white",
+	companion = "ally_aabb_green",
+}
+
+function get_aabb_dot_name(color_type)
+	return color_type .. "_dot"
+end
+
+function marker_loot_actor_on_update()
+	local t = db.storage
+	for id,st in pairs(t) do
+		if (st and st.object and marker_loot_validate_npc(st.object)) then
+			if (marker_loot_storage[id] ~= true) then
+				marker_loot_storage[id] = true
+			end
+		end
+	end
+	
+	marker_loot_active()
+end
+
+function marker_loot_validate_npc(npc)
+    if not (IsStalker(npc)) then
+        return false
+    end
+	
+	if not npc:alive() then
+		return false
+	end
+
+	if npc:relation(db.actor) == game_object.enemy then
+		return  false
+	end
+	
+	if npc:position():distance_to_sqr(db.actor:position()) > aabb_dispaly_range then
+		return false
+	end
+
+	if npc:position():distance_to_sqr(db.actor:position()) < aabb_dont_dispaly_range then
+		return false
+	end
+
+	return true
+end
+
+local HUD_MLt = nil
+
+function marker_loot_active()
+	if (HUD_MLt == nil) then
+		HUD_MLt = hud_ally_safe()
+		get_hud():AddDialogToRender(HUD_MLt)
+	end
+end
+
+function marker_loot_remove()
+	if (HUD_MLt ~= nil) then
+		get_hud():RemoveDialogToRender(HUD_MLt)
+		HUD_MLt = nil
+	end
+end
+
+function marker_loot_update()
+	if (HUD_MLt ~= nil) then
+		HUD_MLt:Update(true)
+	end
+end
+
+class "hud_ally_safe" (CUIScriptWnd)
+
+function hud_ally_safe:__init() super()
+	self:InitControls()
+end
+
+function hud_ally_safe:__finalize()
+end
+
+function hud_ally_safe:InitControls()
+	self:SetAutoDelete(true)
+	self.xml = CScriptXmlInit()
+	self.xml:ParseFile("ui_uf_ally_safe_hud.xml")
+	
+	self.ele = {}
+end
+
+function hud_ally_safe:Update()
+	CUIScriptWnd.Update(self)
+	if ui_mcm then
+		for type , aabb_color in pairs(aabb_color_type) do
+			if aabb_color ~= ui_mcm.get("bodycam/hud/aabb_color_" .. type) then
+				for id,_ in pairs(self.ele) do
+					self.ele[id].aabb:Show(false)
+					self.ele[id].aabb_dot:Show(false)
+					self.ele[id].aabb_companion:Show(false)
+					self.ele[id].aabb_companion_dot:Show(false)
+					self.ele[id] = nil
+				end
+			end
+			aabb_color_type[type] = ui_mcm.get("bodycam/hud/aabb_color_" .. type)
+		end
+
+		aabb_size_ratio = ui_mcm.get("bodycam/hud/aabb_size_ratio")
+		aabb_dispaly_range = UF_MARKER_LOOT_RANGE_SCALE  * ui_mcm.get("bodycam/hud/display_distance_metor")
+		aabb_dont_dispaly_range = UF_MARKER_LOOT_RANGE_SCALE  * ui_mcm.get("bodycam/hud/dont_display_distance_metor")
+
+		aabb_dot_display_ratio = ui_mcm.get("bodycam/hud/aabb_dot_display_ratio")
+		aabb_dot_display_size = ui_mcm.get("bodycam/hud/aabb_dot_display_size")
+	end
+
+	for id,_ in pairs(marker_loot_storage) do
+		local st = db.storage[id]
+		if (st and st.object and marker_loot_validate_npc(st.object)) then
+
+			if (self.ele[id] == nil) then
+				self.ele[id] = {}
+
+				self.ele[id].aabb = self.xml:InitStatic(aabb_color_type["neutral"],self)
+				self.ele[id].border = self.xml:InitStatic("ally_aabb:border",self.ele[id].aabb)
+
+				self.ele[id].aabb_dot = self.xml:InitStatic(get_aabb_dot_name(aabb_color_type["neutral"]),self)
+				self.ele[id].border = self.xml:InitStatic("ally_aabb:border",self.ele[id].aabb)
+				
+
+				self.ele[id].aabb_companion = self.xml:InitStatic(aabb_color_type["companion"],self)
+				self.ele[id].border = self.xml:InitStatic("ally_aabb:border",self.ele[id].aabb_companion)
+
+				self.ele[id].aabb_companion_dot = self.xml:InitStatic(get_aabb_dot_name(aabb_color_type["companion"]),self)
+				self.ele[id].border = self.xml:InitStatic("ally_aabb:border",self.ele[id].aabb)
+
+			end
+			
+			local vec = self:GetScreenCoordinates(st.object)
+
+			if (vec) then
+				local vector3_marker_npc_feet_position = vector():set(st.object:position())
+				local vector3_marker_npc_head_position = vector():set(vector3_marker_npc_feet_position)
+				vector3_marker_npc_head_position.y = vector3_marker_npc_feet_position.y + 1.8
+
+				local vector2_marker_npc_feet_dispaly_position = game.world2ui(vector3_marker_npc_feet_position)
+				local vector2_marker_npc_head_dispaly_position = game.world2ui(vector3_marker_npc_head_position)
+
+				if (vec and (vector2_marker_npc_head_dispaly_position.x ~= -9999) and (vector2_marker_npc_head_dispaly_position.y ~= 0)) then
+					if (vector2_marker_npc_feet_dispaly_position.x ~= -9999) and (vector2_marker_npc_feet_dispaly_position.y ~= 0) then
+
+						vector2_marker_npc_head_dispaly_position = self:Distort_position(vector2_marker_npc_head_dispaly_position)
+						vector2_marker_npc_feet_dispaly_position = self:Distort_position(vector2_marker_npc_feet_dispaly_position)
+
+						aabb_size = vector2_marker_npc_head_dispaly_position.y - vector2_marker_npc_feet_dispaly_position.y
+						aabb_size = aabb_size * aabb_size_ratio
+					end
+				else
+					aabb_size = 0
+				end
+
+
+
+				self.ele[id].aabb:Show(false)
+				self.ele[id].aabb_dot:Show(false)
+				self.ele[id].aabb_companion:Show(false)
+				self.ele[id].aabb_companion_dot:Show(false)
+
+				vec = self:Distort_position(vec)
+				if vec then 
+
+					local is_dot = st.object:position():distance_to_sqr(db.actor:position()) > aabb_dispaly_range * aabb_dot_display_ratio
+
+					if st.object:has_info("npcx_is_companion") then
+						
+						if is_dot then
+							self.ele[id].aabb_companion_dot:SetWndPos(vector2():set(vec))
+							self.ele[id].aabb_companion_dot:SetWndSize(vector2():set(aabb_dot_display_size,aabb_dot_display_size))
+							self.ele[id].aabb_companion_dot:Show(true)		
+						else
+							self.ele[id].aabb_companion:SetWndPos(vector2():set(vec))
+							self.ele[id].aabb_companion:SetWndSize(vector2():set(aabb_size,aabb_size))
+							self.ele[id].aabb_companion:Show(true)
+						end
+					else
+						
+						if is_dot then
+							self.ele[id].aabb_dot:SetWndPos(vector2():set(vec))
+							self.ele[id].aabb_dot:SetWndSize(vector2():set(aabb_dot_display_size,aabb_dot_display_size))
+							self.ele[id].aabb_dot:Show(true)		
+						else
+							self.ele[id].aabb:SetWndPos(vector2():set(vec))
+							self.ele[id].aabb:SetWndSize(vector2():set(aabb_size,aabb_size))
+							self.ele[id].aabb:Show(true)
+						end
+
+					end
+				end
+
+
+
+			else
+				self.ele[id].aabb:Show(false)
+				self.ele[id].aabb_dot:Show(false)
+				self.ele[id].aabb_companion:Show(false)
+				self.ele[id].aabb_companion_dot:Show(false)
+
+			end
+		else
+			marker_loot_storage[id] = nil
+		end
+	end
+	
+	for id,_ in pairs(self.ele) do
+		if (marker_loot_storage[id] ~= true) then
+			self.ele[id].aabb:Show(false)
+			self.ele[id].aabb_dot:Show(false)
+			self.ele[id].aabb_companion:Show(false)
+			self.ele[id].aabb_companion_dot:Show(false)
+			self.ele[id] = nil
+		end
+	end
+end
+
+function hud_ally_safe:GetScreenCoordinates(obj)
+	local pos = utils_obj.safe_bone_pos(obj,"bip01_spine")
+	local vec = pos and game.world2ui(vector():set(pos.x,pos.y,pos.z),false)
+	if (vec and (vec.x ~= -9999) and (vec.y ~= 0)) then
+		return vec
+	end
+	return nil
+end
+
+function hud_ally_safe:Distort_position(vec2pos)
+
+	local vec2uv = vector2():set(vec2pos)
+
+	if vec2uv then
+
+		local GUI_SIZE_X = 1024.0
+		local GUI_SIZE_Y = 768.0
+
+		vec2uv.x = vec2uv.x / GUI_SIZE_X
+		vec2uv.y = vec2uv.y / GUI_SIZE_Y
+
+		local vec2_GUI_CENTER = vector2():set(GUI_SIZE_X * 0.5 , GUI_SIZE_Y * 0.5)
+
+		local zoom       	   = 1.0 / (ui_mcm.get("bodycam/parameter/bodycam_zoom"))
+		local distortion 	   = ui_mcm.get("bodycam/parameter/bodycam_distortion")
+		local distortion_cubic = ui_mcm.get("bodycam/parameter/bodycam_distortion_cubic")
+
+
+
+		local vec2_center_uv 	  = vector2():set(0.5 , 0.5)
+		local vec2_from_center_uv = vector2():set(vec2uv.x - vec2_center_uv.x , vec2uv.y - vec2_center_uv.y)
+
+		local r = 0.0
+		if (distortion_cubic == 0.0) then
+			r = vec2_from_center_uv.y
+		else
+			r = math.sqrt(vec2_from_center_uv.x * vec2_from_center_uv.x + vec2_from_center_uv.y * vec2_from_center_uv.y)
+		end
+
+		local f = 1.0 + r * r * (distortion + distortion_cubic)
+
+		local distort_uv_x = (vec2_from_center_uv.x * 1.0) * f * zoom + vec2_center_uv.x
+		local distort_uv_y = (vec2_from_center_uv.y * 1.0) * f * zoom + vec2_center_uv.y
+
+		local result_x = distort_uv_x * GUI_SIZE_X
+		local result_y = distort_uv_y * GUI_SIZE_Y
+
+		local result = vector2():set(result_x , result_y)
+
+		return result
+
+	end
+
+	return nil
+
+end
+
+
+function actor_on_first_update()
+	marker_loot_active()
+end
+
+function actor_on_net_destroy()
+	marker_loot_remove()
+end
+
+function update_hud_on_show_hide()
+	marker_loot_update()
+end
+
+
+function on_game_start()
+	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
+	RegisterScriptCallback("actor_on_net_destroy",actor_on_net_destroy)
+	RegisterScriptCallback("GUI_on_show",update_hud_on_show_hide)
+	RegisterScriptCallback("GUI_on_hide",update_hud_on_show_hide)
+	RegisterScriptCallback("actor_on_update",marker_loot_actor_on_update)
+end
+

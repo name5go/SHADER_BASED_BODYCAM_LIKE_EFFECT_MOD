@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<w>
+	<ally_aabb x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud.dds</texture>
+	    <border x="0" y="0" width="0" height="0" stretch="0" light_anim="ui_slow_blinking_alpha" la_cyclic="1" la_texture="1" la_text="0" la_alpha="255">
+	    </border>
+	</ally_aabb>
+
+	<ally_aabb_none x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_none.dds</texture>
+	</ally_aabb_none>
+
+	<ally_aabb_white x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_white.dds</texture>
+	</ally_aabb_white>
+
+	<ally_aabb_blue x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_blue.dds</texture>
+	</ally_aabb_blue>
+
+	<ally_aabb_cyan x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_cyan.dds</texture>
+	</ally_aabb_cyan>
+
+	<ally_aabb_green x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_green.dds</texture>
+	</ally_aabb_green>
+
+	<ally_aabb_PURPLE x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_purple.dds</texture>
+	</ally_aabb_PURPLE>
+
+	<ally_aabb_red x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_red.dds</texture>
+	</ally_aabb_red>
+
+	<ally_aabb_yellow x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_aabb_yellow.dds</texture>
+	</ally_aabb_yellow>
+
+
+
+	<ally_aabb_white_dot x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_white_dot.dds</texture>
+	</ally_aabb_white_dot>
+
+	<ally_aabb_green_dot x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_green_dot.dds</texture>
+	</ally_aabb_green_dot>
+
+	<ally_aabb_blue_dot x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_green_dot.dds</texture>
+	</ally_aabb_blue_dot>
+
+	<ally_aabb_cyan_dot x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_green_dot.dds</texture>
+	</ally_aabb_cyan_dot>
+
+	<ally_aabb_purple_dot x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_green_dot.dds</texture>
+	</ally_aabb_purple_dot>
+
+	<ally_aabb_red_dot x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_green_dot.dds</texture>
+	</ally_aabb_red_dot>
+
+	<ally_aabb_yellow_dot x="0" y="0" width="50" height="100" stretch="5" alignment="c" location_level="5">
+	    <texture>ui\ally_safe_hud_texture\ally_safe_hud_green_dot.dds</texture>
+	</ally_aabb_yellow_dot>
+	
+</w>

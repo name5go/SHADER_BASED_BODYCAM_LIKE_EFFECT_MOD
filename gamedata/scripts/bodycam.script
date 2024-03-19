@@ -1,0 +1,65 @@
+local free_number = 0.0
+
+-- in shader_param6
+local bodycam_zoom             = 0.8
+local bodycam_distortion       = 1.5
+local bodycam_distortion_cubic = 0.05
+local bodycam_circle_radius    = 0.75
+local bodycam_circle_blur      = 0.05
+local bodycam_circle_ratio_x   = 16.0
+local bodycam_circle_ratio_y   = 9.0
+
+-- for shader_params string
+local bodycam_buffer_x = ""
+local bodycam_buffer_y = ""
+local bodycam_buffer_z = ""
+local bodycam_buffer_w = ""
+
+-- If it conflicts with other shader mods you use, change here
+local bodycam_use_shader_name = "shader_param_6 "
+
+
+function get_bodycam_buffer()
+
+	-- Get config
+	bodycam_zoom             = ui_mcm.get("bodycam/parameter/bodycam_zoom")
+	bodycam_distortion       = ui_mcm.get("bodycam/parameter/bodycam_distortion")
+	bodycam_distortion_cubic = ui_mcm.get("bodycam/parameter/bodycam_distortion_cubic")
+	bodycam_circle_radius	 = ui_mcm.get("bodycam/parameter/bodycam_circle_radius")
+	bodycam_circle_blur      = ui_mcm.get("bodycam/parameter/bodycam_circle_blur")
+
+	bodycam_circle_ratio_x	 = ui_mcm.get("bodycam/parameter/bodycam_circle_ratio_x")
+	bodycam_circle_ratio_y	 = ui_mcm.get("bodycam/parameter/bodycam_circle_ratio_y")
+
+	-- To string
+	free_number = (bodycam_zoom * 10.0) + (bodycam_circle_ratio_x * 0.001) + (bodycam_circle_ratio_y * 0.00001)
+	bodycam_buffer_x = tostring(free_number)
+
+	free_number = (bodycam_distortion * 10.0) + (bodycam_distortion_cubic * 0.01)
+	bodycam_buffer_y = tostring(free_number)
+
+	bodycam_buffer_z = tostring(bodycam_circle_radius)
+
+	bodycam_buffer_w = tostring(bodycam_circle_blur)
+
+
+	-- Result
+	return "(" .. bodycam_buffer_x .. "," .. bodycam_buffer_y .. "," .. bodycam_buffer_z .. "," .. bodycam_buffer_w .. ")"
+end
+
+function body_cam_update()
+	get_console():execute(bodycam_use_shader_name ..  get_bodycam_buffer() )
+end
+
+function actor_on_update()
+	body_cam_update()
+end
+
+function actor_on_first_update()
+	body_cam_update()
+end
+
+function on_game_start()
+	RegisterScriptCallback("actor_on_first_update",actor_on_first_update)
+	RegisterScriptCallback("actor_on_update",actor_on_update)
+end

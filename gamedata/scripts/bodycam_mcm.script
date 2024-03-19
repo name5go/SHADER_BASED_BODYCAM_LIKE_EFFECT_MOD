@@ -1,0 +1,76 @@
+-- Colorset
+local color_preset_table = {
+	{"ally_aabb_none" ,   "NONE"	  },
+	{"ally_aabb_white" ,  "WHITE"  },
+	{"ally_aabb_blue" ,   "BLUE"   },
+	{"ally_aabb_cyan" ,   "CYAN"	  },
+	{"ally_aabb_green" ,  "GREEN"  },
+	{"ally_aabb_purple" , "PURPLE" },
+	{"ally_aabb_red" ,    "RED"	  },
+	{"ally_aabb_yellow" , "YELLOW" },
+}
+
+
+-- OnLoad
+function on_mcm_load()
+	local op = {
+        id = "bodycam",
+        gr = { }
+    }
+
+	-- BodycamParameter
+	local parameter = { 
+		id = "parameter",
+		text = "ui_mcm_bodycam_parameter",
+		sh =true ,
+		gr = {
+			{
+                id = "title",
+                type = "slide",
+                link = "ui_options_slider_gameplay_diff",
+                text = "ui_mcm_bodycam_parameter_title",
+                size = {512,50},
+                spacing = 20
+            }, 
+
+			{id = "bodycam_zoom",             	  type = "track" , val = 2, min = 0 , max = 2.0, def = 0.8, step = 0.05},
+			{id = "bodycam_distortion",       	  type = "track" , val = 2, min = 0 , max = 3.0, def = 1.0, step = 0.05},
+			{id = "bodycam_distortion_cubic", 	  type = "track" , val = 2, min = 0 , max = 3.0, def = 0.05, step = 0.05},
+			{id = "bodycam_circle_radius", 	  	  type = "track" , val = 2, min = 0 , max = 2.0, def = 0.8, step = 0.005},
+			{id = "bodycam_circle_blur", 	  	  type = "track" , val = 2, min = 0 , max = 1.0, def = 0.12, step = 0.005},
+			{id = "bodycam_circle_ratio_x",   	  type = "track" , val = 2, min = 0 , max = 30.0, def = 16, step = 1.0},
+			{id = "bodycam_circle_ratio_y",   	  type = "track" , val = 2, min = 0 , max = 15.0, def = 10, step = 1.0},
+		}
+	}
+
+	table.insert(op.gr, parameter)
+
+	-- BodycamHUD
+	local hud = { 
+		id = "hud",
+		text = "ui_mcm_bodycam_hud",
+		sh =true ,
+		gr = {
+			{
+                id = "title",
+                type = "slide",
+                link = "ui_options_slider_gameplay_diff",
+                text = "ui_mcm_bodycam_hud_title",
+                size = {512,50},
+                spacing = 20
+            }, 
+
+			{id = "aabb_color_neutral" ,    type = "list", val = 0, def = "ally_aabb_white", content = color_preset_table, no_str = true},
+			{id = "aabb_color_companion" ,  type = "list", val = 0, def = "ally_aabb_green", content = color_preset_table, no_str = true},
+			{id = "display_distance_metor" , 	    type = "track" , val = 2, min = 0 , max = 100.0, def = 20.0, step = 1.0},
+			{id = "dont_display_distance_metor" , type = "track" , val = 2, min = 0 , max = 0.5, def = 0.001, step = 0.001},
+			{id = "aabb_size_ratio" , 	 	type = "track" , val = 2, min = 0 , max = 3.0, def = 1.0, step = 0.05},
+			{id = "aabb_dot_display_ratio" , 	 	type = "track" , val = 2, min = 0 , max = 1.0, def = 0.5, step = 0.05},
+			{id = "aabb_dot_display_size" , 	 	type = "track" , val = 2, min = 0 , max = 100, def = 50, step = 0.5},
+		}
+	}
+
+	table.insert(op.gr, hud)
+
+	return op
+end

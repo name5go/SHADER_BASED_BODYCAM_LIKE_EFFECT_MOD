@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="windows-1251"?>
+
+<!--MCM-->
+<string_table>
+	<string id="ui_mcm_menu_bodycam">
+		<text>BODYCAM</text>
+	</string>
+
+	<!--PARAMETER-->
+    <string id="ui_mcm_bodycam_parameter">
+        <text>PARAMETER</text>
+    </string>
+
+	<string id="ui_mcm_bodycam_parameter_title">
+		<text>BODYCAM_PARAM</text>
+	</string>
+	
+	<string id="ui_mcm_bodycam_parameter_bodycam_zoom">
+		<text>bodycam_zoom</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_parameter_bodycam_distortion">
+		<text>bodycam_distortion</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_parameter_bodycam_distortion_cubic">
+		<text>bodycam_distortion_cubic</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_parameter_bodycam_circle_radius">
+		<text>bodycam_circle_radius</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_parameter_bodycam_circle_blur">
+		<text>bodycam_circle_blur</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_parameter_bodycam_circle_ratio_x">
+		<text>bodycam_circle_ratio_x</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_parameter_bodycam_circle_ratio_y">
+		<text>bodycam_circle_ratio_y</text>
+	</string>
+
+	<!--HUD-->
+    <string id="ui_mcm_bodycam_hud">
+        <text>HUD</text>
+    </string>
+
+	<string id="ui_mcm_bodycam_hud_title">
+		<text>BODYCAM_HUD</text>
+	</string>
+	
+	<string id="ui_mcm_bodycam_hud_bodycam_hud_aabb_color_neutral">
+		<text>aabb_color_neutral</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_hud_bodycam_hud_aabb_color_companion">
+		<text>aabb_color_companion</text>
+	</string>
+
+	<string id="ui_mcm_bodycam_hud_bodycam_hud_display_distance">
+		<text>display_distance</text>
+	</string>
+	
+	<string id="ui_mcm_bodycam_hud_bodycam_hud_hide_distance">
+		<text>dont_display_distance</text>
+	</string>
+		
+	<string id="ui_mcm_bodycam_hud_bodycam_hud_aabb_size_ratio">
+		<text>aabb_size_ratio</text>
+	</string>
+
+</string_table>
