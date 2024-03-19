@@ -5,7 +5,7 @@ reshade経由のエフェクトだとインゲームのHUDやUIにまでエフ�
 moddb
 https://www.moddb.com/mods/stalker-anomaly/addons/shader-based-bodycam-like-effect-mod
 
-
+(moddbの説明欄からのコピペ)
 DESCRIPTION
 jp reshadeでエフェクトをかけるとHUDやGUIにまで影響が出てしまってQOLが低下したことはありませんか？
 これはmodded exeを使用できない環境のプレイヤーに向けたボディカメラ風味のエフェクトMODです。
